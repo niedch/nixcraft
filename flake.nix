@@ -93,9 +93,30 @@
       "aarch64-linux"
     ];
     forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system nixpkgs.legacyPackages.${system});
+
+    mkRustPlatformLLVM22 = pkgs: let
+      llvmPackages = pkgs.llvmPackages_22;
+      llvmShared = llvmPackages.libllvm.override { enableSharedLibraries = true; };
+      rustc-unwrapped = pkgs.rustc-unwrapped.override {
+        inherit llvmPackages llvmShared;
+        llvmSharedForBuild = llvmShared;
+        llvmSharedForHost = llvmShared;
+        llvmSharedForTarget = llvmShared;
+      };
+      rustc = pkgs.wrapRustcWith {
+        inherit rustc-unwrapped;
+      };
+    in
+      pkgs.makeRustPlatform {
+        inherit rustc;
+        cargo = pkgs.cargo;
+      };
   in {
     packages = forAllSystems (system: pkgs: let
-      mkCraftApp = pkgs.callPackage ./pkgs/common/mk-craft-app.nix { };
+      rustPlatform = mkRustPlatformLLVM22 pkgs;
+      mkCraftApp = pkgs.callPackage ./pkgs/common/mk-craft-app.nix {
+        inherit rustPlatform;
+      };
     in rec {
       photocraft = pkgs.callPackage ./pkgs/photocraft {
         inherit mkCraftApp;
@@ -305,9 +326,12 @@
     });
 
     overlays.default = final: prev: let
-      mkCraftApp = final.callPackage ./pkgs/common/mk-craft-app.nix { };
+      rustPlatform = mkRustPlatformLLVM22 final;
+      mkCraftApp = final.callPackage ./pkgs/common/mk-craft-app.nix {
+        inherit rustPlatform;
+      };
     in {
-      inherit mkCraftApp;
+      inherit rustPlatform mkCraftApp;
 
       photocraft = final.callPackage ./pkgs/photocraft {
         inherit mkCraftApp;
@@ -412,6 +436,7 @@
     };
 
     devShells = forAllSystems (system: pkgs: let
+      rustPlatform = mkRustPlatformLLVM22 pkgs;
       runtimeLibs = with pkgs; [
         wayland
         libxkbcommon
@@ -430,7 +455,7 @@
       default = pkgs.mkShell {
         nativeBuildInputs = with pkgs; [
           cargo
-          rustc
+          rustPlatform.rust.rustc
           rust-analyzer
           clippy
           rustfmt
@@ -439,7 +464,7 @@
 
         buildInputs = runtimeLibs;
 
-        RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}/lib/rustlib/src/rust/library";
+        RUST_SRC_PATH = "${rustPlatform.rustLibSrc}/lib/rustlib/src/rust/library";
         RUST_BACKTRACE = 1;
 
         shellHook = ''
