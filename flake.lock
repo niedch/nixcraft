@@ -99,11 +99,11 @@
     "gridcraft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1791863471,
-        "narHash": "sha256-w5qVpkknAQe/X2MNd0tIwjxQirbdFjBJyFJo/wLMydE=",
+        "lastModified": 1791866041,
+        "narHash": "sha256-WYbXe62MuHp0l3p8qE6OGSnjsMgtQRAuB+qLvX5xjdI=",
         "owner": "storytold",
         "repo": "gridcraft",
-        "rev": "45221f524370c216babb328e690cf7814ac728c6",
+        "rev": "6405b00cf70545eb133f9bbf06a2a99c6cef3923",
         "type": "github"
       },
       "original": {
@@ -147,11 +147,11 @@
     "pdfcraft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1791865199,
-        "narHash": "sha256-wEmo2GYthYtCiicrHsmSoacnOPmckuszSz0I8S4MKeg=",
+        "lastModified": 1791866836,
+        "narHash": "sha256-EWFviJloyC/GzUffkuAAfaLGdYuRBxRgchK5tLLAKTM=",
         "owner": "storytold",
         "repo": "pdfcraft",
-        "rev": "082768ac29ce5e7024881ade9ce1d19e55991be1",
+        "rev": "251917f685a8f252548620fe619ebc0c85b7f162",
         "type": "github"
       },
       "original": {
@@ -163,11 +163,11 @@
     "photocraft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1791865730,
-        "narHash": "sha256-BUzPD30t7XQy1DjWTeZ6HsAq302o3odwSPUUkUZvxUM=",
+        "lastModified": 1791866348,
+        "narHash": "sha256-tzvlOEaON7sLif13YdK/pPESe7JNuFo2o4r4PshVzb8=",
         "owner": "storytold",
         "repo": "photocraft",
-        "rev": "6b6a9234d1b726c89283889a4eef2e897a419d36",
+        "rev": "a6e1beb1be0e5f5ade1dd452f9660ef61d6df10d",
         "type": "github"
       },
       "original": {
