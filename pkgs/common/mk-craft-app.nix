@@ -1,177 +1,199 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  buildFHSEnv,
   makeWrapper,
-  pkg-config,
-  wayland,
-  libxkbcommon,
-  libGL,
-  vulkan-loader,
-  libx11,
-  libxcursor,
-  libxi,
-  libxrandr,
-  libxcb,
-  fontconfig,
-  freetype,
-  alsa-lib,
+  ...
 }:
 
 let
-  graphicsLibs = [
-    wayland
-    libxkbcommon
-    libGL
-    vulkan-loader
-    libx11
-    libxcursor
-    libxi
-    libxrandr
-    libxcb
-  ];
-
-  fontLibs = [
-    fontconfig
-    freetype
-  ];
-
-  audioLibs = [
-    alsa-lib
-  ];
-
   mkCraftApp =
     {
       pname,
       version,
-      src,
-      isGui ? true,
+      hash ? null,
+      hashes ? { },
+      src ? null,
+      baseName ? lib.removeSuffix "-cli" pname,
+      repo ? baseName,
+      appImageName ? (if baseName == "craft-launcher" then "artcraft-launcher" else baseName),
+      binaryName ? (
+        if isGui then
+          (if baseName == "craft-launcher" then "artcraft-launcher" else baseName)
+        else
+          "${baseName}-cli"
+      ),
+      appId ? "ai.storyteller.${if baseName == "craft-launcher" then "artcraft-launcher" else baseName}",
+      isGui ? (!lib.hasSuffix "-cli" pname),
       withAudio ? isGui,
-      cargoPackage ? pname,
-      cargoBuildFlags ? [ "--package=${cargoPackage}" ],
-      cargoTestFlags ? [ "--package=${cargoPackage}" ],
-      buildFeatures ? [ ],
-      cargoLock ? null,
-      lockFile ? "${src}/Cargo.lock",
-      outputHashes ? { },
-      nativeBuildInputs ? [ ],
-      buildInputs ? [ ],
-      extraRuntimeLibs ? [ ],
-      appId ? "ai.storyteller.${pname}",
-      releaseDate ? "2026-01-01",
       installDesktop ? isGui,
-      wrapBinary ? isGui,
+      extraPkgs ? pkgs: [ ],
+      extraInstallCommands ? "",
       extraPostInstall ? "",
       meta ? { },
+      passthru ? { },
       ...
     }@args:
     let
-      # Libraries dynamically loaded via dlopen at runtime (LD_LIBRARY_PATH)
-      defaultRuntimeLibs =
-        lib.optionals isGui (graphicsLibs ++ lib.optionals withAudio audioLibs)
-        ++ extraRuntimeLibs;
+      arch =
+        {
+          "x86_64-linux" = "x86_64";
+          "aarch64-linux" = "aarch64";
+        }
+        .${stdenv.hostPlatform.system}
+          or (throw "Unsupported architecture for Craft apps: ${stdenv.hostPlatform.system}");
 
-      # Libraries linked or resolved via pkg-config at build time
-      defaultBuildInputs =
-        lib.optionals isGui (defaultRuntimeLibs ++ fontLibs)
-        ++ buildInputs;
+      appImageUrl = "https://github.com/storytold/${repo}/releases/download/v${version}/${appImageName}-${version}-linux-${arch}.AppImage";
 
-      # Host build tooling
-      defaultNativeBuildInputs =
-        [ pkg-config ]
-        ++ lib.optionals (isGui || wrapBinary) [ makeWrapper ]
-        ++ nativeBuildInputs;
-
-      resolvedCargoLock =
-        if cargoLock != null then
-          cargoLock
+      resolvedHash =
+        if hash != null then
+          hash
+        else if hashes ? ${stdenv.hostPlatform.system} then
+          hashes.${stdenv.hostPlatform.system}
         else
-          {
-            inherit lockFile;
+          "";
+
+      resolvedSrc =
+        if (hash != null || hashes ? ${stdenv.hostPlatform.system} || src == null) then
+          fetchurl {
+            url = appImageUrl;
+            ${if resolvedHash != "" then "hash" else null} = resolvedHash;
           }
-          // lib.optionalAttrs (outputHashes != null && outputHashes != { }) {
-            inherit outputHashes;
+        else if (lib.isDerivation src || !builtins.pathExists "${src}/Cargo.toml") then
+          src
+        else
+          fetchurl {
+            url = appImageUrl;
+            ${if resolvedHash != "" then "hash" else null} = resolvedHash;
           };
 
-      mainProgram = meta.mainProgram or pname;
-
-      defaultPostInstall = ''
-        ${lib.optionalString installDesktop ''
-          if [ -f "packaging/linux/${appId}.desktop" ]; then
-            install -Dm644 "packaging/linux/${appId}.desktop" "$out/share/applications/${appId}.desktop"
-          fi
-
-          if [ -f "packaging/linux/${appId}.mime.xml" ]; then
-            install -Dm644 "packaging/linux/${appId}.mime.xml" "$out/share/mime/packages/${appId}.xml"
-          fi
-
-          if [ -d "assets/app-icon/hicolor" ]; then
-            install -d "$out/share/icons"
-            cp -r assets/app-icon/hicolor "$out/share/icons/"
-          fi
-
-          if [ -f "packaging/linux/${appId}.metainfo.xml.in" ]; then
-            install -d "$out/share/metainfo"
-            sed -e "s/@VERSION@/${version}/g" -e "s/@DATE@/${releaseDate}/g" \
-              "packaging/linux/${appId}.metainfo.xml.in" > "$out/share/metainfo/${appId}.metainfo.xml"
-          fi
-        ''}
-        ${lib.optionalString wrapBinary ''
-          wrapProgram "$out/bin/${mainProgram}" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath defaultRuntimeLibs}" \
-            --prefix PATH : "${lib.makeBinPath [ fontconfig ]}"
-        ''}
-        ${extraPostInstall}
-      '';
-
-      defaultMeta = with lib; {
-        homepage = "https://github.com/storytold/${lib.removeSuffix "-cli" pname}";
-        license = with licenses; [ mit asl20 ];
-        maintainers = [ ];
-        inherit mainProgram;
-        platforms = platforms.linux;
+      appimageContents = appimageTools.extract {
+        pname = appImageName;
+        inherit version;
+        src = resolvedSrc;
       };
 
-      # Strip helper-specific arguments before passing to buildRustPackage
-      rustPackageArgs = removeAttrs args [
-        "isGui"
-        "withAudio"
-        "cargoPackage"
-        "lockFile"
-        "outputHashes"
-        "extraRuntimeLibs"
-        "appId"
-        "releaseDate"
-        "installDesktop"
-        "wrapBinary"
-        "extraPostInstall"
-      ];
+      resolvedExtraPkgs = if lib.isFunction extraPkgs then extraPkgs else (pkgs: extraPkgs);
+
+      fhsExtraPkgs =
+        pkgs:
+        [
+          pkgs.libxshmfence
+          pkgs.vulkan-loader
+          pkgs.libGL
+        ]
+        ++ lib.optionals withAudio [ pkgs.alsa-lib ]
+        ++ resolvedExtraPkgs pkgs;
+
+      defaultExtraInstallCommands = ''
+        ${lib.optionalString installDesktop ''
+          if [ -f "${appimageContents}/${appId}.desktop" ]; then
+            install -Dm644 "${appimageContents}/${appId}.desktop" "$out/share/applications/${appId}.desktop"
+          elif [ -f "${appimageContents}/usr/share/applications/${appId}.desktop" ]; then
+            install -Dm644 "${appimageContents}/usr/share/applications/${appId}.desktop" "$out/share/applications/${appId}.desktop"
+          elif [ -f "${appimageContents}/${appImageName}.desktop" ]; then
+            install -Dm644 "${appimageContents}/${appImageName}.desktop" "$out/share/applications/${appId}.desktop"
+          elif [ -f "${appimageContents}/usr/share/applications/${appImageName}.desktop" ]; then
+            install -Dm644 "${appimageContents}/usr/share/applications/${appImageName}.desktop" "$out/share/applications/${appId}.desktop"
+          fi
+
+          if [ -f "$out/share/applications/${appId}.desktop" ]; then
+            sed -i -e "s|^Exec=AppRun|Exec=${binaryName}|" "$out/share/applications/${appId}.desktop"
+          fi
+
+          if [ -d "${appimageContents}/usr/share/icons" ]; then
+            install -d "$out/share"
+            cp -r "${appimageContents}/usr/share/icons" "$out/share/"
+            chmod -R u+w "$out/share"
+          fi
+          if [ ! -f "$out/share/icons/hicolor/256x256/apps/${appId}.png" ]; then
+            if [ -f "${appimageContents}/${appId}.png" ]; then
+              install -Dm644 "${appimageContents}/${appId}.png" "$out/share/icons/hicolor/256x256/apps/${appId}.png"
+            elif [ -f "${appimageContents}/${appImageName}.png" ]; then
+              install -Dm644 "${appimageContents}/${appImageName}.png" "$out/share/icons/hicolor/256x256/apps/${appId}.png"
+            elif [ -f "${appimageContents}/.DirIcon" ]; then
+              install -Dm644 "${appimageContents}/.DirIcon" "$out/share/icons/hicolor/256x256/apps/${appId}.png"
+            fi
+          fi
+
+          if [ -f "${appimageContents}/usr/share/mime/packages/${appId}.xml" ]; then
+            install -Dm644 "${appimageContents}/usr/share/mime/packages/${appId}.xml" "$out/share/mime/packages/${appId}.xml"
+          elif [ -f "${appimageContents}/usr/share/mime/packages/${appImageName}.xml" ]; then
+            install -Dm644 "${appimageContents}/usr/share/mime/packages/${appImageName}.xml" "$out/share/mime/packages/${appId}.xml"
+          elif [ -f "${appimageContents}/${appId}.mime.xml" ]; then
+            install -Dm644 "${appimageContents}/${appId}.mime.xml" "$out/share/mime/packages/${appId}.xml"
+          fi
+
+          if [ -f "${appimageContents}/usr/share/metainfo/${appId}.metainfo.xml" ]; then
+            install -Dm644 "${appimageContents}/usr/share/metainfo/${appId}.metainfo.xml" "$out/share/metainfo/${appId}.metainfo.xml"
+          elif [ -f "${appimageContents}/usr/share/metainfo/${appImageName}.metainfo.xml" ]; then
+            install -Dm644 "${appimageContents}/usr/share/metainfo/${appImageName}.metainfo.xml" "$out/share/metainfo/${appId}.metainfo.xml"
+          elif [ -f "${appimageContents}/usr/share/appdata/${appId}.appdata.xml" ]; then
+            install -Dm644 "${appimageContents}/usr/share/appdata/${appId}.appdata.xml" "$out/share/metainfo/${appId}.appdata.xml"
+          fi
+        ''}
+        ${extraInstallCommands}
+        ${extraPostInstall}
+        ${lib.optionalString (baseName == "craft-launcher") ''
+          if [ -e "$out/bin/craft-launcher" ] && [ ! -e "$out/bin/artcraft-launcher" ]; then
+            ln -s craft-launcher "$out/bin/artcraft-launcher"
+          elif [ -e "$out/bin/artcraft-launcher" ] && [ ! -e "$out/bin/craft-launcher" ]; then
+            ln -s artcraft-launcher "$out/bin/craft-launcher"
+          fi
+        ''}
+      '';
+
+      mainProgram = meta.mainProgram or binaryName;
+
+      defaultMeta = with lib; {
+        homepage = "https://github.com/storytold/${repo}";
+        license = with licenses; [
+          mit
+          asl20
+        ];
+        maintainers = [ ];
+        inherit mainProgram;
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      };
+
+      defaultPassthru = passthru // {
+        inherit appimageContents;
+      };
     in
-    rustPlatform.buildRustPackage (
-      rustPackageArgs
-      // {
-        inherit pname version src;
-        cargoLock = resolvedCargoLock;
-        inherit cargoBuildFlags cargoTestFlags;
-        nativeBuildInputs = defaultNativeBuildInputs;
-        buildInputs = defaultBuildInputs;
-        postInstall = defaultPostInstall;
-
+    if isGui then
+      appimageTools.wrapType2 {
+        inherit pname version;
+        executableName = binaryName;
+        src = resolvedSrc;
+        extraPkgs = fhsExtraPkgs;
+        extraInstallCommands = defaultExtraInstallCommands;
+        passthru = defaultPassthru;
         meta = defaultMeta // meta;
-
-        passthru = (args.passthru or { }) // {
-          runtimeLibs = defaultRuntimeLibs;
-        };
       }
-      // lib.optionalAttrs (buildFeatures != [ ]) {
-        inherit buildFeatures;
-      }
-    );
+    else
+      buildFHSEnv (
+        appimageTools.defaultFhsEnvArgs
+        // {
+          name = pname;
+          pname = pname;
+          inherit version;
+          executableName = binaryName;
+          runScript = "${appimageContents}/usr/bin/${binaryName}";
+          targetPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs) ++ (fhsExtraPkgs pkgs);
+          extraInstallCommands = defaultExtraInstallCommands;
+          passthru = defaultPassthru;
+          meta = defaultMeta // meta;
+        }
+      );
 in
 {
   __functor = self: args: mkCraftApp args;
-  inherit graphicsLibs fontLibs audioLibs;
-  guiRuntimeLibs = graphicsLibs ++ audioLibs;
-  guiBuildInputs = graphicsLibs ++ fontLibs ++ audioLibs;
   gui = args: mkCraftApp (args // { isGui = true; });
   cli = args: mkCraftApp (args // { isGui = false; });
 }

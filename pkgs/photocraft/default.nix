@@ -1,21 +1,17 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "photocraft";
-  version = "0.8.0";
-  inherit src;
+  version = "0.9.0";
 
-  outputHashes = {
-    "craft-print-0.1.0" = "sha256-J/EJJeDDWXc+QQtpUqnAKKA4piOdPRbH3uG1ms2BRgY=";
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
+  hashes = {
+    x86_64-linux = "sha256-SDqaeSAODAhku1TPP6pqVeK3nBQz2s/LFT04YuePMrw=";
+    aarch64-linux = "sha256-J1K1CX4niMwasMe0EGV7Hqt5C8w7V2+HSd5wcoLbqeM=";
   };
-
-  buildFeatures = [ "heif" ];
 
   meta.description = "PhotoCraft: Open-source Rust image editor (Photoshop alternative)";
 }

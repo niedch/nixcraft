@@ -1,19 +1,16 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "designcraft";
-  version = "0.7.0";
-  inherit src;
+  version = "0.8.0";
 
-  outputHashes = {
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
-    "craft-print-0.1.0" = "sha256-J/EJJeDDWXc+QQtpUqnAKKA4piOdPRbH3uG1ms2BRgY=";
-    "winit-0.30.13" = "sha256-q1gDwAj8xU/2OC4CtCG72ZvrkZ436V3zsqh5hovLTcs=";
+  hashes = {
+    x86_64-linux = "sha256-iNV3EPVsn7fY4z4EYGHv+DkReXG0AqQQPEszK1yjtd8=";
+    aarch64-linux = "sha256-b//15t+tMUWefzyXvhEO0hwGnLYCA4cN56UnRtTnCm0=";
   };
 
   meta.description = "DesignCraft: Open-source page layout and desktop publishing (InDesign alternative)";

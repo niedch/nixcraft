@@ -2,7 +2,7 @@
 
 Nix flake packaging and unified development environment for the **Storytold Craft App Suite** — a comprehensive collection of 13 open-source, high-performance creative and productivity applications written in Rust.
 
-NixCraft provides reproducible builds, Wayland/X11 runtime wrappers, desktop integration assets (icons, desktop entries, MIME associations), headless automation CLIs with built-in [Model Context Protocol (MCP)](https://modelcontextprotocol.io) servers for AI assistants, Nixpkgs overlays, and a development shell with graphics and audio toolchains.
+Rather than compiling applications from Rust source, NixCraft fetches pre-built upstream AppImages and wraps them via Nixpkgs `appimageTools` (`wrapType2` for GUI applications and `buildFHSEnv` for headless CLIs). NixCraft provides reproducible packages, Wayland/X11 runtime wrappers, desktop integration assets extracted from upstream AppImages (icons, desktop entries, MIME associations), headless automation CLIs with built-in [Model Context Protocol (MCP)](https://modelcontextprotocol.io) servers for AI assistants, Nixpkgs overlays, and a development shell with graphics and audio toolchains.
 
 Supported platforms: `x86_64-linux`, `aarch64-linux`.
 
@@ -14,19 +14,19 @@ The suite comprises 13 applications spanning digital image editing, vector graph
 
 | Application | Desktop Package | CLI / MCP Package | Version | Creative Domain / Proprietary Alternative | Key Capabilities |
 |---|---|---|---|---|---|
-| **PhotoCraft** | `photocraft` | `photocraft-cli` | 0.8.0 | Raster Image Editor *(Adobe Photoshop)* | Non-destructive layer engine, masks, blend modes, adjustments, filters, RAW/HEIF/.psd/.pcraft support |
-| **VectorCraft** | `vectorcraft` | `vectorcraft-cli` | 0.10.0 | Vector Illustration *(Adobe Illustrator)* | Bézier paths, boolean path ops, stroke styling, typography, SVG/PDF render and export |
-| **DeckCraft** | `deckcraft` | `deckcraft-cli` | 0.6.0 | Presentations *(Microsoft PowerPoint / Keynote)* | Slide design, vector components, speaker notes, slide transitions, PDF/HTML presentation export |
-| **GridCraft** | `gridcraft` | `gridcraft-cli` | 0.6.0 | Spreadsheets *(Microsoft Excel)* | High-performance grid computation, formula evaluation, charts, CSV/XLSX interoperability |
-| **WordCraft** | `wordcraft` | `wordcraft-cli` | 0.6.0 | Word Processing *(Microsoft Word)* | Document authoring, rich typography, styles, tables, DOCX/ODT/Markdown import and export |
-| **CadCraft** | `cadcraft` | `cadcraft-cli` | 0.6.1 | 2D CAD Drafting *(AutoCAD)* | Precision drafting, geometric constraints, dimensional geometry, layers, DXF/DWG/SVG export |
-| **LightCraft** | `lightcraft` | `lightcraft-cli` | 0.7.0 | RAW Photo Processor *(Adobe Lightroom)* | Non-destructive RAW processing, exposure/tone grading, lens corrections, HEIF support, photo cataloging |
-| **SoundCraft** | `soundcraft` | `soundcraft-cli` | 0.6.0 | Digital Audio Workstation *(Pro Tools / Ableton)* | Multi-track audio timeline, mixing, waveform editing, ALSA audio integration, session management |
-| **DesignCraft** | `designcraft` | `designcraft-cli` | 0.7.0 | Desktop Publishing *(Adobe InDesign)* | Multi-page layout, master pages, typography grid, print-ready CMYK color, PDF/EPUB publishing |
-| **FilmCraft** | `filmcraft` | `filmcraft-cli` | 0.7.0 | Non-Linear Video Editor *(Premiere / DaVinci Resolve)* | Multi-track video/audio timeline, transitions, color grading, media probing, rendering pipeline |
-| **EffectCraft** | `effectcraft` | `effectcraft-cli` | 0.9.0 | VFX & Motion Graphics *(Adobe After Effects)* | Motion graphics, keyframe animation, visual compositing, video codecs, particle effects |
-| **PdfCraft** | `pdfcraft` | `pdfcraft-cli` | 0.7.0 | PDF Editor & Reader *(Adobe Acrobat Pro)* | PDF viewing, page manipulation (split/merge/rotate), annotations, form filling, text extraction |
-| **Craft Launcher** | `craft-launcher` | *N/A (GUI hub)* | 0.3.2 | Suite Launcher *(Creative Cloud Desktop)* | Unified application hub to discover, install, update, and launch all Craft suite tools |
+| **PhotoCraft** | `photocraft` | `photocraft-cli` | 0.9.0 | Raster Image Editor *(Adobe Photoshop)* | Non-destructive layer engine, masks, blend modes, adjustments, filters, RAW/HEIF/.psd/.pcraft support |
+| **VectorCraft** | `vectorcraft` | `vectorcraft-cli` | 0.11.0 | Vector Illustration *(Adobe Illustrator)* | Bézier paths, boolean path ops, stroke styling, typography, SVG/PDF render and export |
+| **DeckCraft** | `deckcraft` | `deckcraft-cli` | 0.7.0 | Presentations *(Microsoft PowerPoint / Keynote)* | Slide design, vector components, speaker notes, slide transitions, PDF/HTML presentation export |
+| **GridCraft** | `gridcraft` | `gridcraft-cli` | 0.7.0 | Spreadsheets *(Microsoft Excel)* | High-performance grid computation, formula evaluation, charts, CSV/XLSX interoperability |
+| **WordCraft** | `wordcraft` | `wordcraft-cli` | 0.7.0 | Word Processing *(Microsoft Word)* | Document authoring, rich typography, styles, tables, DOCX/ODT/Markdown import and export |
+| **CadCraft** | `cadcraft` | `cadcraft-cli` | 0.7.0 | 2D CAD Drafting *(AutoCAD)* | Precision drafting, geometric constraints, dimensional geometry, layers, DXF/DWG/SVG export |
+| **LightCraft** | `lightcraft` | `lightcraft-cli` | 0.8.0 | RAW Photo Processor *(Adobe Lightroom)* | Non-destructive RAW processing, exposure/tone grading, lens corrections, HEIF support, photo cataloging |
+| **SoundCraft** | `soundcraft` | `soundcraft-cli` | 0.7.0 | Digital Audio Workstation *(Pro Tools / Ableton)* | Multi-track audio timeline, mixing, waveform editing, ALSA audio integration, session management |
+| **DesignCraft** | `designcraft` | `designcraft-cli` | 0.8.0 | Desktop Publishing *(Adobe InDesign)* | Multi-page layout, master pages, typography grid, print-ready CMYK color, PDF/EPUB publishing |
+| **FilmCraft** | `filmcraft` | `filmcraft-cli` | 0.8.0 | Non-Linear Video Editor *(Premiere / DaVinci Resolve)* | Multi-track video/audio timeline, transitions, color grading, media probing, rendering pipeline |
+| **EffectCraft** | `effectcraft` | `effectcraft-cli` | 0.10.0 | VFX & Motion Graphics *(Adobe After Effects)* | Motion graphics, keyframe animation, visual compositing, video codecs, particle effects |
+| **PdfCraft** | `pdfcraft` | `pdfcraft-cli` | 0.8.0 | PDF Editor & Reader *(Adobe Acrobat Pro)* | PDF viewing, page manipulation (split/merge/rotate), annotations, form filling, text extraction |
+| **Craft Launcher** | `craft-launcher` | *N/A (GUI hub)* | 0.4.1 | Suite Launcher *(Creative Cloud Desktop)* | Unified application hub to discover, install, update, and launch all Craft suite tools |
 
 ---
 
@@ -119,7 +119,9 @@ nix run .#cadcraft-cli -- convert drawing.dwg drawing.dxf
 nix run .#deckcraft-cli -- render presentation.deck slides.pdf
 ```
 
-### Building Packages (`nix build`)
+### Packaging & Building Packages (`nix build`)
+
+Instead of compiling Rust crates from source, derivations fetch pre-built upstream AppImages from GitHub releases and wrap them via Nixpkgs `appimageTools` (`wrapType2` for desktop GUI apps and `buildFHSEnv` for headless CLIs), extracting desktop integration assets in the process.
 
 Build derivations into `./result`:
 
@@ -443,10 +445,10 @@ environment.systemPackages = [
 
 ## Desktop Integration
 
-Desktop applications built by NixCraft automatically include full Linux desktop environment integration:
-- **Wayland & X11 Runtime Wrappers**: Dynamic loader paths configured for Wayland, Vulkan, OpenGL, and X11 libraries.
+Desktop applications wrapped by NixCraft automatically include full Linux desktop environment integration extracted directly from the upstream AppImages:
+- **Wayland & X11 Runtime Wrappers**: Dynamic loader paths configured for Wayland, Vulkan, OpenGL, and X11 libraries via `appimageTools`.
 - **ALSA Audio Integration**: SoundCraft and FilmCraft include ALSA library configuration for low-latency audio.
-- **Desktop Entries (`.desktop`)**: Installed into `$out/share/applications/` with standard category definitions.
-- **MIME Types (`.xml`)**: Installed into `$out/share/mime/packages/` for system file association.
-- **App Icons**: High-resolution and hicolor icon themes installed into `$out/share/icons/`.
-- **AppStream Metainfo**: Standard metainfo descriptors installed into `$out/share/metainfo/`.
+- **Desktop Entries (`.desktop`)**: Extracted and installed into `$out/share/applications/` with standard category definitions and updated `Exec` paths.
+- **MIME Types (`.xml`)**: Extracted and installed into `$out/share/mime/packages/` for system file association.
+- **App Icons**: High-resolution and hicolor icon themes extracted and installed into `$out/share/icons/`.
+- **AppStream Metainfo**: Standard metainfo descriptors extracted and installed into `$out/share/metainfo/`.

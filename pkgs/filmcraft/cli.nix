@@ -1,18 +1,17 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "filmcraft-cli";
-  version = "0.7.0";
-  inherit src;
+  version = "0.8.0";
   isGui = false;
 
-  outputHashes = {
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
+  hashes = {
+    x86_64-linux = "sha256-QZVel8iTJDXytruCRXg8ZoeGsz0rfflivQl2QdpoIR4=";
+    aarch64-linux = "sha256-3tlW77tcDLItdJL/gyOMHP9CqIrcTI2L/fo4TcAvF5o=";
   };
 
   meta.description = "Headless FilmCraft: render, export, probe media, and MCP server";

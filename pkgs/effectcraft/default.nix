@@ -1,18 +1,16 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "effectcraft";
-  version = "0.9.0";
-  inherit src;
+  version = "0.10.0";
 
-  outputHashes = {
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
-    "filmcraft-codecs-0.1.1" = "sha256-WXiX4rF7zSwfu3yu9aNH2/xWYhAYFVX1rdrnccuTD7g=";
+  hashes = {
+    x86_64-linux = "sha256-0OQBb25ZFb+EdGX8+kBToWB+CvoWs1/tFWp4x16ItlA=";
+    aarch64-linux = "sha256-a8LBThWmpLabMuhSt+arc6trjJ9HoDT9apRrI6avcl0=";
   };
 
   meta.description = "EffectCraft: Open-source visual effects and motion graphics (After Effects alternative)";

@@ -1,18 +1,16 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "pdfcraft";
-  version = "0.7.0";
-  inherit src;
+  version = "0.8.0";
 
-  outputHashes = {
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
-    "craft-print-0.1.0" = "sha256-J/EJJeDDWXc+QQtpUqnAKKA4piOdPRbH3uG1ms2BRgY=";
+  hashes = {
+    x86_64-linux = "sha256-a4k5fsEK1QXnMvGJgratFxqrCF2TjKDDA0oA1BmeOPc=";
+    aarch64-linux = "sha256-l9+yYmXBDQ3S3WaCf3eo681CHa8REGstZysW77husMg=";
   };
 
   meta.description = "PdfCraft: Open-source PDF editor and reader (Acrobat alternative)";

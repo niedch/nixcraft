@@ -1,18 +1,17 @@
 {
   callPackage,
   mkCraftApp ? callPackage ../common/mk-craft-app.nix { },
-  src,
   ...
 }:
 
 mkCraftApp {
   pname = "cadcraft-cli";
-  version = "0.6.1";
-  inherit src;
+  version = "0.7.0";
   isGui = false;
 
-  outputHashes = {
-    "craft-ui-0.1.0" = "sha256-VhLeT7VLdZAIz6gR9PdFI34IJxHsGF8NE0uzFCN2vIU=";
+  hashes = {
+    x86_64-linux = "sha256-sqooB8iG4brnsAZPR2iKYu1v4foF8Fs1LjYs3GmPC3c=";
+    aarch64-linux = "sha256-jHRb/0KslPeE0ijwOo8dcz8Cmwnydx1pBzaQUy0ISF4=";
   };
 
   meta.description = "Headless CADCraft: convert, inspect, export, and MCP server";
