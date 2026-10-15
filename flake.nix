@@ -44,6 +44,8 @@
       effectcraft-cli = pkgs.callPackage ./pkgs/effectcraft/cli.nix { inherit mkCraftApp; };
       pdfcraft = pkgs.callPackage ./pkgs/pdfcraft { inherit mkCraftApp; };
       pdfcraft-cli = pkgs.callPackage ./pkgs/pdfcraft/cli.nix { inherit mkCraftApp; };
+      figcraft = pkgs.callPackage ./pkgs/figcraft { inherit mkCraftApp; };
+      figcraft-cli = pkgs.callPackage ./pkgs/figcraft/cli.nix { inherit mkCraftApp; };
     };
   in {
     packages = forAllSystems (system: pkgs: let
@@ -90,6 +92,7 @@
         fontconfig
         freetype
         alsa-lib
+        libva
       ];
     in {
       default = pkgs.mkShell {

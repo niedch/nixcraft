@@ -83,6 +83,7 @@ let
           pkgs.libxshmfence
           pkgs.vulkan-loader
           pkgs.libGL
+          pkgs.libva
         ]
         ++ lib.optionals withAudio [ pkgs.alsa-lib ]
         ++ resolvedExtraPkgs pkgs;
