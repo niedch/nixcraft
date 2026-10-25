@@ -6,12 +6,12 @@
 
 mkCraftApp {
   pname = "vectorcraft-cli";
-  version = "0.11.0";
+  version = "0.16.0";
   isGui = false;
 
   hashes = {
-    x86_64-linux = "sha256-CrUSb5svlZG8J6EOIOobLyOThLGhb+yIKI7T3m2/gxw=";
-    aarch64-linux = "sha256-nUV35h1sxnKMGHT/oPeXtzEalpQTS60jKCzf2d+8iJs=";
+    x86_64-linux = "sha256-ih8iRY0rAJQO/RpWneziWEj60Yx1pad9XoxLcZKpIxk=";
+    aarch64-linux = "sha256-vVqN1wlO7pXKZxE8vC/a+5T02gCB4a+ymgx7XqeI4BQ=";
   };
 
   meta.description = "VectorCraft CLI and MCP server";

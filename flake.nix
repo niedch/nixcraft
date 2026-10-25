@@ -59,11 +59,19 @@
           exec python3 "${./maintainers/scripts/check-updates.py}" "$@"
         '';
       };
+      updateScript = pkgs.writeShellApplication {
+        name = "update";
+        runtimeInputs = [ pkgs.python3 ];
+        meta.description = "Update Storytold Craft applications to their latest upstream releases";
+        text = ''
+          exec python3 "${./maintainers/scripts/update.py}" "$@"
+        '';
+      };
     in pkgs' // {
       default = pkgs'.photocraft;
       all = allCraftApps;
       check-updates = checkUpdatesScript;
-      update = checkUpdatesScript;
+      update = updateScript;
     });
 
     apps = forAllSystems (system: _pkgs:
