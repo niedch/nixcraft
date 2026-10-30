@@ -6,11 +6,11 @@
 
 mkCraftApp {
   pname = "craft-launcher";
-  version = "0.7.0";
+  version = "0.10.0";
 
   hashes = {
-    x86_64-linux = "sha256-+Aub3P65K8iKVNB+fy4D8YgPP88lwVEYZLPUEY7O4dg=";
-    aarch64-linux = "sha256-gvuGpMB4yN7j4WfeLspwTheKi48NgnOqtXz37eD6abQ=";
+    x86_64-linux = "sha256-LH8/nHPdlEUx3wc+pugAz/W6nVM9AP8fABVHDvF0Eq0=";
+    aarch64-linux = "sha256-A/QSZbaPIs76f7t94uPGNf0qFVkshGxGavmazONmbLE=";
   };
 
   appId = "ai.storyteller.artcraft-launcher";

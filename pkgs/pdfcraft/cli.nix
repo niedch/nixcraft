@@ -6,12 +6,12 @@
 
 mkCraftApp {
   pname = "pdfcraft-cli";
-  version = "0.13.0";
+  version = "0.15.0";
   isGui = false;
 
   hashes = {
-    x86_64-linux = "sha256-P8ZO1lHbJiuZT82cw9XXuy5NR5mktKGzh5Ldtf4QbGA=";
-    aarch64-linux = "sha256-1g4Q8bnVPs+8enzcXFjKvAaMtcba2KjomcOjHBPwkw4=";
+    x86_64-linux = "sha256-fXdxpiqcgeNbHeKGrTgRDIWlmgQMErlh8CTulyM40v4=";
+    aarch64-linux = "sha256-xDAQN4+RgIh2ROqlrYzJ/5FocU4KEI9J5iosG3vgEqA=";
   };
 
   meta.description = "Headless PdfCraft: inspect, render, split, edit, and MCP server";

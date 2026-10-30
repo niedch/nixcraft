@@ -6,11 +6,11 @@
 
 mkCraftApp {
   pname = "cadcraft";
-  version = "0.12.0";
+  version = "0.14.0";
 
   hashes = {
-    x86_64-linux = "sha256-6FFLtojQPPpg32VK3FcGpEJbBGA26HPGheDdL6R+m3M=";
-    aarch64-linux = "sha256-hCH6kORgLjR2GwHM6ZOooAnRAu1DKKtzMmhZ//covvc=";
+    x86_64-linux = "sha256-0FTldp7hgTRpjQdzR2hxyt2JSRqRUjw+slioJia7mec=";
+    aarch64-linux = "sha256-HAni+Nt7vmtwnQpeymB+dT/LJmtU6PqDt+fAP5rJS/w=";
   };
 
   meta.description = "CADCraft: Open-source 2D CAD drafting and design (AutoCAD alternative)";

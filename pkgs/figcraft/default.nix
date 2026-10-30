@@ -7,11 +7,11 @@
 
 mkCraftApp {
   pname = "figcraft";
-  version = "0.10.0";
+  version = "0.12.1";
 
   hashes = {
-    x86_64-linux = "sha256-KPjv4Yd5SY4obOk+lEIFjw2xe0Vw4suSv1JsPnI0hOk=";
-    aarch64-linux = "sha256-0rRBc8iJLgCTW/4hVpe9CEa3DM4gHghBj4stuEz8Jns=";
+    x86_64-linux = "sha256-xSvgRte+pzeQ81hP/KbseTXfIprc6Pjkg7AyQu4qqx8=";
+    aarch64-linux = "sha256-N2v+/m5ZZ3UofKKd8eQ31DiR2VRVmltu03LmDPKP+mA=";
   };
 
   meta.description = "FigCraft: Interface design; an open-source, clean-room reimplementation of Figma";
