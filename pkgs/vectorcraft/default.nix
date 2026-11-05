@@ -6,11 +6,11 @@
 
 mkCraftApp {
   pname = "vectorcraft";
-  version = "0.18.0";
+  version = "0.21.1";
 
   hashes = {
-    x86_64-linux = "sha256-ng1If8cbEi6W8ZsTbTrNs4XqpAn21KgDRVfyNWLyEIo=";
-    aarch64-linux = "sha256-QxKRfcBwTYln0cPTf8OFTVrhNWMcF7tMy4EawTc6st8=";
+    x86_64-linux = "sha256-eGVCmEYRl3Lb1d2TlcuojHGQz/W5KxexQRA65yhcmeA=";
+    aarch64-linux = "sha256-Qsmq+VeEVKWkLuoah0bDsqFQGTxR3pzxsS58KJ5pO+I=";
   };
 
   meta.description = "VectorCraft: Open-source Rust vector graphics editor (Illustrator alternative)";

@@ -6,12 +6,12 @@
 
 mkCraftApp {
   pname = "gridcraft-cli";
-  version = "0.13.0";
+  version = "0.16.1";
   isGui = false;
 
   hashes = {
-    x86_64-linux = "sha256-KofDeUyyp9AkKlHHaViDuL6uUafF+sWJp9WN3hlYs4U=";
-    aarch64-linux = "sha256-M/PSiiN76iBCA+8Fdvg1+s+n4QkQzlAohr+PW0NMu3s=";
+    x86_64-linux = "sha256-l7atP75HHS3pTeqqfbMSYko53WPl7h679rOFY9Yqrlc=";
+    aarch64-linux = "sha256-OyQci6YIwDVSeAWAIFLtADUDrRFQFmjLfCgkrWGdN6I=";
   };
 
   meta.description = "Headless GridCraft: inspect, convert, evaluate, and serve MCP";

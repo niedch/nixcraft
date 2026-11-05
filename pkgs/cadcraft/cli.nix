@@ -6,12 +6,12 @@
 
 mkCraftApp {
   pname = "cadcraft-cli";
-  version = "0.14.0";
+  version = "0.17.1";
   isGui = false;
 
   hashes = {
-    x86_64-linux = "sha256-0FTldp7hgTRpjQdzR2hxyt2JSRqRUjw+slioJia7mec=";
-    aarch64-linux = "sha256-HAni+Nt7vmtwnQpeymB+dT/LJmtU6PqDt+fAP5rJS/w=";
+    x86_64-linux = "sha256-I+XPzjIcitvMVtuB/6LkftnfpESRjbuqo2LWeBAPnlk=";
+    aarch64-linux = "sha256-LFiv7b5O4abNKM7DKG2K+0BGW1cH6o8TvIfIZRxvCnk=";
   };
 
   meta.description = "Headless CADCraft: convert, inspect, export, and MCP server";

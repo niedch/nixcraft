@@ -6,11 +6,11 @@
 
 mkCraftApp {
   pname = "effectcraft";
-  version = "0.18.0";
+  version = "0.21.1";
 
   hashes = {
-    x86_64-linux = "sha256-Bx+OtCvmOnhiEX05n5bX7UzFuQrB0Gtrq5k3DQzUraM=";
-    aarch64-linux = "sha256-vuOn+Ncghp35+SdrPfL45/VOi56WGrKWZl8kpweLbUg=";
+    x86_64-linux = "sha256-W9VdQHYJugst9IPjqVUFQiOY0rh0MV2lBr6x9NWVjzw=";
+    aarch64-linux = "sha256-PX4yarrxpi6iw9XubxHLumWnYbZbxIgO39HOzxCc/1I=";
   };
 
   meta.description = "EffectCraft: Open-source visual effects and motion graphics (After Effects alternative)";

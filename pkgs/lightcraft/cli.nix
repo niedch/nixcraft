@@ -6,12 +6,12 @@
 
 mkCraftApp {
   pname = "lightcraft-cli";
-  version = "0.15.0";
+  version = "0.18.1";
   isGui = false;
 
   hashes = {
-    x86_64-linux = "sha256-hR8cFVT9qSj+Qz6cvg4TmjkyMVZVYcLlFStyC7BZgTs=";
-    aarch64-linux = "sha256-F7VBOMEbR4FVgOGepRKPQageM9mLfJfCmoEIufyKKRk=";
+    x86_64-linux = "sha256-NGz4TCYjIpNLSou+6fvX2zjxWRfJPy3QQJeS0Rv6fbA=";
+    aarch64-linux = "sha256-UqfG5Dq+9DTs/Zdamjt/gYLMNh2bbqGCYw5Wbcu0qL4=";
   };
 
   meta.description = "Headless LightCraft: render, catalog, batch processing, and MCP server";
